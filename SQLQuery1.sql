@@ -1,0 +1,1 @@
+﻿select * from [login].[dbo].[user];
