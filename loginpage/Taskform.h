@@ -1,6 +1,7 @@
 #pragma once
-
+#include "User.h"
 namespace loginpage {
+	
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -15,13 +16,21 @@ namespace loginpage {
 	public ref class Taskform : public System::Windows::Forms::Form
 	{
 	public:
-		Taskform(void)
+		event EventDelegate1^ moveFormEvent;
+		
+		int MoveToForm = 0;
+		User^ userCurrent;
+		Taskform(User^ user)
 		{
+			userCurrent = user;
 			InitializeComponent();
+			//formLocal = form1;
 			//
 			//TODO: Add the constructor code here
 			//
 		}
+		
+	event EventHandler<FormClosedEventArgs^>^ ThresholdReached;
 
 	protected:
 		/// <summary>
@@ -33,6 +42,13 @@ namespace loginpage {
 			{
 				delete components;
 			}
+
+
+		}
+	protected:
+		virtual void OnFormClosed1(FormClosedEventArgs^ e)
+		{
+			ThresholdReached(this, e);
 		}
 	private: System::Windows::Forms::Label^ label1;
 	protected:
@@ -73,6 +89,7 @@ namespace loginpage {
 			this->label1->TabIndex = 0;
 			this->label1->Text = L"Task Manager";
 			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->label1->Click += gcnew System::EventHandler(this, &Taskform::label1_Click);
 			// 
 			// btnaddtask
 			// 
@@ -91,7 +108,7 @@ namespace loginpage {
 				static_cast<System::Byte>(0)));
 			this->textBox1->Location = System::Drawing::Point(50, 490);
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(305, 53);
+			this->textBox1->Size = System::Drawing::Size(305, 38);
 			this->textBox1->TabIndex = 2;
 			this->textBox1->TextChanged += gcnew System::EventHandler(this, &Taskform::textBox1_TextChanged);
 			// 
@@ -136,9 +153,18 @@ namespace loginpage {
 #pragma endregion
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
+	public: bool formClosed = false;
 private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^ e) {
+	MoveToForm = 0;
+	this->moveFormEvent(this, e, "MainForm");
 }
+
+
+
 private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
+private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
+
 }

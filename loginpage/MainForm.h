@@ -1,5 +1,6 @@
 #pragma once
 #include "User.h"
+
 namespace loginpage {
 
 	using namespace System;
@@ -8,21 +9,29 @@ namespace loginpage {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Threading::Tasks;
+
 
 	/// <summary>
 	/// Summary for MainForm
 	/// </summary>
 	public ref class MainForm : public System::Windows::Forms::Form
 	{
+	
 	public:
+		event EventDelegate1^ moveFormEvent;
+		User^ userCurrent;
+		int MoveToForm = 0;
 		MainForm(User ^user)
 		{
 			InitializeComponent();
+			//MainForm::instance = this;
 			//
 			//TODO: Add the constructor code here
 			//
 			//lbUserInfo->Text = "ID=" + user->id + ",Name=" + user->name +
 				//",email=" + user->email + ",address=" + user->address;
+			userCurrent = user;
 		}
 
 	protected:
@@ -104,7 +113,7 @@ namespace loginpage {
 			this->lltask->LinkColor = System::Drawing::Color::Black;
 			this->lltask->Location = System::Drawing::Point(39, 182);
 			this->lltask->Name = L"lltask";
-			this->lltask->Size = System::Drawing::Size(222, 37);
+			this->lltask->Size = System::Drawing::Size(149, 26);
 			this->lltask->TabIndex = 3;
 			this->lltask->TabStop = true;
 			this->lltask->Text = L"Task Manager";
@@ -118,7 +127,7 @@ namespace loginpage {
 			this->llhabits->LinkColor = System::Drawing::Color::Black;
 			this->llhabits->Location = System::Drawing::Point(39, 269);
 			this->llhabits->Name = L"llhabits";
-			this->llhabits->Size = System::Drawing::Size(226, 37);
+			this->llhabits->Size = System::Drawing::Size(152, 26);
 			this->llhabits->TabIndex = 4;
 			this->llhabits->TabStop = true;
 			this->llhabits->Text = L"Habits Tracker";
@@ -131,7 +140,7 @@ namespace loginpage {
 			this->llmood->LinkColor = System::Drawing::Color::Black;
 			this->llmood->Location = System::Drawing::Point(39, 363);
 			this->llmood->Name = L"llmood";
-			this->llmood->Size = System::Drawing::Size(215, 37);
+			this->llmood->Size = System::Drawing::Size(144, 26);
 			this->llmood->TabIndex = 5;
 			this->llmood->TabStop = true;
 			this->llmood->Text = L"Mood Tracker";
@@ -144,10 +153,11 @@ namespace loginpage {
 			this->lldiary->LinkColor = System::Drawing::Color::Black;
 			this->lldiary->Location = System::Drawing::Point(24, 465);
 			this->lldiary->Name = L"lldiary";
-			this->lldiary->Size = System::Drawing::Size(241, 37);
+			this->lldiary->Size = System::Drawing::Size(164, 26);
 			this->lldiary->TabIndex = 6;
 			this->lldiary->TabStop = true;
 			this->lldiary->Text = L" Gratitude Diary";
+			this->lldiary->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &MainForm::lldiary_LinkClicked_1);
 			// 
 			// MainForm
 			// 
@@ -174,7 +184,20 @@ namespace loginpage {
 	}
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
+	
 	private: System::Void lltask_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
+		MoveToForm = 10;
+		this->moveFormEvent(this, e, "Taskform");
+		
+
+
 	}
+
+	
+	
+private: System::Void lldiary_LinkClicked_1(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
+	MoveToForm = 20;
+	this->moveFormEvent(this, e, "Diaryform");
+}
 };
 }

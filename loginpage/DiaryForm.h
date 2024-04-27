@@ -1,6 +1,6 @@
 #pragma once
-
-namespace loginpage {
+#include "User.h"
+namespace diarypage {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -15,7 +15,11 @@ namespace loginpage {
 	public ref class DiaryForm : public System::Windows::Forms::Form
 	{
 	public:
-		DiaryForm(void)
+		event EventDelegate1^ moveFormEvent;
+
+		int MoveToForm = 0;
+		User^ userCurrent;
+		DiaryForm(User^ user)
 		{
 			InitializeComponent();
 			//
@@ -42,7 +46,7 @@ namespace loginpage {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -96,6 +100,7 @@ namespace loginpage {
 	private: System::Void rtbdiary_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void DiaryForm_Load(System::Object^ sender, System::EventArgs^ e) {
+
 	}
 	};
 }

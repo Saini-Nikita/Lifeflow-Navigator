@@ -210,53 +210,7 @@ namespace loginpage {
 
 	public: User^ user =nullptr;
 	private: System::Void btn1_Click(System::Object^ sender, System::EventArgs^ e) {
-		String^ email = this->tbemail->Text;
-		String^ password = this->tbpassword->Text;
-		/*
-		if (email->Length == 0 || password->Length == 0) {
-			MessageBox::Show("Please enter email and password.",
-				"Email or password is empty.", MessageBoxButtons::OK);
-			return;
-		}*/
-		try {
-			
-			String^ connString = "Data Source=localhost\\sqlexpress;Initial Catalog=login;Integrated Security=True;Encrypt=False";// "Data Source=localhost\\sqlexpress;Initial Catalog=login;Integrated Security=True;Encrypt=True;TrustServerCerticate=True";
-			SqlConnection sqlConn(connString);
-			
-			sqlConn.Open();
-
-			String^ sqlquery = "SELECT * FROM [login].[dbo].[user] WHERE email=@email AND password=@pwd";
-			SqlCommand command(sqlquery, %sqlConn);
-			command.Parameters->AddWithValue("@email", email);
-			command.Parameters->AddWithValue("@pwd", password);
-
-			SqlDataReader^ reader = command.ExecuteReader();
-			if (reader->Read()) {
-				user = gcnew User;
-				user->id = reader->GetInt32(0);
-				user->name = reader->GetString(1);
-				user->email = reader->GetString(2);
-				user->phone = reader->GetString(3);
-				user->address = reader->GetString(4);
-				user->password = reader->GetString(5);
-
-				this->Close();
-				MessageBox::Show("welcome ",
-					"welcome", MessageBoxButtons::OK);
-				
-			}
-
-			else {
-				MessageBox::Show("Email or password is incorrect",
-					"Email or Password error", MessageBoxButtons::OK);
-
-			}
-		}
-
-		catch (Exception^ e) {
-			MessageBox::Show("Failed to connect to database",
-				"Database Connection Error", MessageBoxButtons::OK);
-		}
+		this->Close();
 	}
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 	
