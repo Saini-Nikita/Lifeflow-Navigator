@@ -37,16 +37,18 @@ namespace loginpage {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Label^ label1;
+
 	protected:
-	private: System::Windows::Forms::Label^ label2;
+
 	private: System::Windows::Forms::Label^ label4;
-	private: System::Windows::Forms::TextBox^ tbemail;
-	private: System::Windows::Forms::TextBox^ tbpassword;
+
+
 	private: System::Windows::Forms::Button^ btn1;
 
 	private: System::Windows::Forms::Button^ btn2;
 	private: System::Windows::Forms::LinkLabel^ llRegister;
+	private: System::Windows::Forms::DataGridView^ dataGridView1;
+
 
 
 
@@ -54,6 +56,11 @@ namespace loginpage {
 
 
 	private:
+		SqlConnection^ cn;
+		DataSet^ CustomersDataSet;
+		SqlDataAdapter^ da;
+		SqlCommandBuilder^ cmdBuilder;
+		BindingSource^ source;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -67,43 +74,13 @@ namespace loginpage {
 		void InitializeComponent(void)
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(LoginForm::typeid));
-			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
-			this->tbemail = (gcnew System::Windows::Forms::TextBox());
-			this->tbpassword = (gcnew System::Windows::Forms::TextBox());
 			this->btn1 = (gcnew System::Windows::Forms::Button());
 			this->btn2 = (gcnew System::Windows::Forms::Button());
 			this->llRegister = (gcnew System::Windows::Forms::LinkLabel());
+			this->dataGridView1 = (gcnew System::Windows::Forms::DataGridView());
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			this->SuspendLayout();
-			// 
-			// label1
-			// 
-			this->label1->BackColor = System::Drawing::Color::Transparent;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Underline)),
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label1->ForeColor = System::Drawing::SystemColors::ActiveCaptionText;
-			this->label1->ImageAlign = System::Drawing::ContentAlignment::BottomCenter;
-			this->label1->Location = System::Drawing::Point(145, 172);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(154, 48);
-			this->label1->TabIndex = 0;
-			this->label1->Text = L"Email:";
-			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-			this->label1->Click += gcnew System::EventHandler(this, &LoginForm::label1_Click);
-			// 
-			// label2
-			// 
-			this->label2->BackColor = System::Drawing::Color::Transparent;
-			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Underline)),
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->label2->Location = System::Drawing::Point(145, 264);
-			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(198, 52);
-			this->label2->TabIndex = 1;
-			this->label2->Text = L"Password:";
-			this->label2->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
-			this->label2->Click += gcnew System::EventHandler(this, &LoginForm::label2_Click);
 			// 
 			// label4
 			// 
@@ -117,23 +94,6 @@ namespace loginpage {
 			this->label4->Text = L"Login ";
 			this->label4->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->label4->Click += gcnew System::EventHandler(this, &LoginForm::label4_Click);
-			// 
-			// tbemail
-			// 
-			this->tbemail->Location = System::Drawing::Point(414, 176);
-			this->tbemail->Name = L"tbemail";
-			this->tbemail->Size = System::Drawing::Size(350, 44);
-			this->tbemail->TabIndex = 4;
-			this->tbemail->TextChanged += gcnew System::EventHandler(this, &LoginForm::textBox1_TextChanged);
-			// 
-			// tbpassword
-			// 
-			this->tbpassword->Location = System::Drawing::Point(414, 272);
-			this->tbpassword->Name = L"tbpassword";
-			this->tbpassword->PasswordChar = '*';
-			this->tbpassword->Size = System::Drawing::Size(350, 44);
-			this->tbpassword->TabIndex = 5;
-			this->tbpassword->TextChanged += gcnew System::EventHandler(this, &LoginForm::textBox2_TextChanged);
 			// 
 			// btn1
 			// 
@@ -160,35 +120,44 @@ namespace loginpage {
 			this->llRegister->AutoSize = true;
 			this->llRegister->Location = System::Drawing::Point(350, 473);
 			this->llRegister->Name = L"llRegister";
-			this->llRegister->Size = System::Drawing::Size(134, 37);
+			this->llRegister->Size = System::Drawing::Size(93, 26);
 			this->llRegister->TabIndex = 8;
 			this->llRegister->TabStop = true;
 			this->llRegister->Text = L"Register";
 			this->llRegister->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &LoginForm::llRegister_LinkClicked);
 			// 
+			// dataGridView1
+			// 
+			this->dataGridView1->AllowUserToAddRows = false;
+			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->dataGridView1->Location = System::Drawing::Point(244, 169);
+			this->dataGridView1->Name = L"dataGridView1";
+			this->dataGridView1->RowTemplate->Height = 28;
+			this->dataGridView1->Size = System::Drawing::Size(406, 150);
+			this->dataGridView1->TabIndex = 9;
+			// 
 			// LoginForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(19, 37);
+			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::LavenderBlush;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(800, 597);
+			this->Controls->Add(this->dataGridView1);
 			this->Controls->Add(this->llRegister);
 			this->Controls->Add(this->btn2);
 			this->Controls->Add(this->btn1);
-			this->Controls->Add(this->tbpassword);
-			this->Controls->Add(this->tbemail);
 			this->Controls->Add(this->label4);
-			this->Controls->Add(this->label2);
-			this->Controls->Add(this->label1);
 			this->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->Margin = System::Windows::Forms::Padding(6);
 			this->Name = L"LoginForm";
 			this->Text = L"LoginForm";
 			this->Load += gcnew System::EventHandler(this, &LoginForm::LoginForm_Load);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
+
 
 		}
 #pragma endregion
@@ -205,7 +174,38 @@ namespace loginpage {
     private: System::Void textBox2_TextChanged(System::Object^ sender, System::EventArgs^ e) {
     }
     private: System::Void btn2_Click(System::Object^ sender, System::EventArgs^ e) {
-		this->Close();
+		try {
+
+
+			cn = gcnew SqlConnection();
+			CustomersDataSet = gcnew DataSet();
+
+			cn->ConnectionString = "Data Source=LAPTOP-8O1PHOFG\\SQLEXPRESS;Initial Catalog=login;Integrated Security=True;"; "Server=server;Database=northwind;UID=login;PWD=password;";
+			cn->Open();
+
+			//Initialize the SqlDataAdapter object by specifying a Select command
+			//that retrieves data from the sample table
+			da = gcnew SqlDataAdapter("select *  FROM [login].[dbo].[user]", cn);
+
+			//Initialize the SqlCommandBuilder object to automatically generate and initialize
+			//the UpdateCommand, InsertCommand and DeleteCommand properties of the SqlDataAdapter
+			cmdBuilder = gcnew SqlCommandBuilder(da);
+			DataTable^ table = gcnew DataTable();
+
+			//Populate the DataSet by executing the Fill method of the SqlDataAdapter
+			da->Fill(table);
+
+			source = gcnew BindingSource();
+			source->DataSource = table;
+			dataGridView1->DataSource = source;
+			da->Update(table);
+		}
+		catch (Exception^ e) {
+			Console::WriteLine("Customer Name after Update : ");
+
+
+		}
+
     }
 
 	public: User^ user =nullptr;
